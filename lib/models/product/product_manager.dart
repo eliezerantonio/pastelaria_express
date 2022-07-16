@@ -42,8 +42,10 @@ class ProductManager extends ChangeNotifier {
       {UserManager userManager, String adminId}) async {
     try {
       if (userManager != null) {
+        print("Buscar admin");
         loadAllProductsAdmin(adminId: userManager.user?.id ?? "");
       } else {
+        print("Buscar user");
         loadAllProductsUser(adminId: adminId);
       }
     } catch (e) {

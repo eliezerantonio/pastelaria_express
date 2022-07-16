@@ -1,4 +1,3 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +47,7 @@ class PastryshopWidget extends StatelessWidget {
                         width: 80,
                         alignment: Alignment.center,
                         child: Text(
-                          "${pastryshop.likes} ${pastryshop.likes == 1 ? "Gostou" : "Gostaram"}",
+                          "${pastryshop.likes}",
                           style: const TextStyle(
                               fontSize: 14, color: Colors.white),
                         ),
@@ -64,7 +63,7 @@ class PastryshopWidget extends StatelessWidget {
                         alignment: Alignment.center,
                         padding: const EdgeInsets.all(2),
                         child: Text(
-                          "${pastryshop.dislikes} ${pastryshop.dislikes == 1 ? "Não Gostou" : "Não Gostaram"}",
+                          "${pastryshop.dislikes} ",
                           style: const TextStyle(
                               fontSize: 14, color: Colors.white),
                         ),
@@ -79,13 +78,13 @@ class PastryshopWidget extends StatelessWidget {
                 ],
               ),
             ),
-            if (user != null && !user.admin)
-               IconButton(
-                    onPressed: () {
-                      pastryshop.delete();
-                    },
-                    icon: const Icon(Icons.delete, color: Colors.grey),
-                  )
+            if (user.superUser)
+              IconButton(
+                onPressed: () {
+                  pastryshop.delete();
+                },
+                icon: const Icon(Icons.delete, color: Colors.grey),
+              )
           ],
         ),
       ),

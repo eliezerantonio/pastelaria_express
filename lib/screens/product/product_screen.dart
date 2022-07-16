@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:pastelariaexpress/components/custom_button.dart';
 
 import '../../imports.dart';
 import '../../models/cart/cart_manager.dart';
@@ -13,7 +14,6 @@ class ProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   
     return ChangeNotifierProvider.value(
       value: product,
       child: Scaffold(
@@ -195,12 +195,7 @@ class ProductScreen extends StatelessWidget {
                               cart.clear();
                               addProduct(cart, product, context);
                             }
-                          } else {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => LoginScreen()));
-                          }
+                          } else {}
                         },
                         child: Container(
                           height: 60,
@@ -254,7 +249,18 @@ class ProductScreen extends StatelessWidget {
               ),
             );
           } else {
-            return Container();
+            return Container(
+              height: 47,
+              margin: const EdgeInsets.all(10),
+              child: CustomButton(
+                text: 'Faça login para comprar',
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => LoginScreen()));
+
+                },
+              ),
+            );
           }
         }),
       ),

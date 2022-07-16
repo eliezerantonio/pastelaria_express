@@ -30,7 +30,7 @@ class Pastryshop with ChangeNotifier {
   Pastryshop.fromDocument(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     id = doc.id;
-    name = data["name"] as String;
+    name = data["name"] as String ?? "";
     ibam = data["ibam"] as String;
     deleted = data["deleted"] as bool;
     images = List<String>.from(data['images'] as List<dynamic>) ?? [];
@@ -40,7 +40,7 @@ class Pastryshop with ChangeNotifier {
     adminId = data["adminId"] as String;
     classifiers = List<String>.from(data['classifiers'] as List<dynamic>) ?? [];
     description = data["description"] as String;
-  }
+}
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 

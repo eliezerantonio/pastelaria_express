@@ -27,6 +27,8 @@ class CarouselSliderHome extends StatelessWidget {
           Navigator.of(context).pushNamed("/product", arguments: e);
         },
         child: Container(
+          width: 100,
+          height: 100,
           margin: const EdgeInsets.only(left: 3, right: 9),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),

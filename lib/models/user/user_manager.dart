@@ -40,11 +40,12 @@ class UserManager with ChangeNotifier {
   }
 
 //cadastro
-  Future<void> signUp(
-      {@required UserModel user,
-      @required Function onFail,
-      @required Function onSuccess,
-      bool admin = false,}) async {
+  Future<void> signUp({
+    @required UserModel user,
+    @required Function onFail,
+    @required Function onSuccess,
+    bool admin = false,
+  }) async {
     loading = true;
     try {
       final result = await auth.createUserWithEmailAndPassword(
@@ -63,6 +64,17 @@ class UserManager with ChangeNotifier {
       onFail(getErrorString(e.code));
     } finally {
       loading = false;
+    }
+  }
+
+  Future<void> sendEmail(
+      {String email, Function onFail, Function onSuccess}) async {
+    try {
+      await auth.sendPasswordResetEmail(email: email);
+
+      onSuccess();
+    } on FirebaseAuthException catch (e) {
+      onFail(getErrorString(e.code));
     }
   }
 

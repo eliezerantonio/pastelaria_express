@@ -38,7 +38,6 @@ class _BaseScreenState extends State<BaseScreen> {
             children: <Widget>[
               HomeScreen(),
               OrdersScreen(),
-              LoginScreen(),
               AdminOrdersScreen(),
               SignUpPastryshopScreen(),
               const PastryshopsScreen(),
