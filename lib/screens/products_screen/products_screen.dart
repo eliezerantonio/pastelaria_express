@@ -30,7 +30,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   Widget build(BuildContext context) {
-  
     //recebendo dados
     return ChangeNotifierProvider.value(
       //recebendo os dados passados apartir da te
@@ -106,7 +105,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       );
                     } else {
                       return Container();
-                  }
+                    }
                   },
                 ),
               ],
@@ -173,15 +172,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
               delegate: SliverChildListDelegate([
                 Consumer2<ProductManager, UserManager>(
                   builder: (_, productManager, userManager, __) {
-                    final filteredProducts = productManager.filteredProducts;
+                    final filteredProducts = productManager.allProducts;
                     if (!userManager.adminEnabled &&
                         widget.pastryshop.adminId != null) {
                       productManager.loadAllProducts(
                           adminId: widget.pastryshop.adminId);
                       return Stack(
                         children: [
-                          const SizedBox(height: 10),
-
                           //cliente
 
                           GridView.builder(

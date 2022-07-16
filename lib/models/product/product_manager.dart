@@ -42,10 +42,8 @@ class ProductManager extends ChangeNotifier {
       {UserManager userManager, String adminId}) async {
     try {
       if (userManager != null) {
-        print("Buscar admin");
         loadAllProductsAdmin(adminId: userManager.user?.id ?? "");
       } else {
-        print("Buscar user");
         loadAllProductsUser(adminId: adminId);
       }
     } catch (e) {
@@ -70,11 +68,10 @@ class ProductManager extends ChangeNotifier {
   Future<void> loadAllProductsUser({@required String adminId}) async {
     isLoading = true;
     id = adminId;
-
+    print("Buscar user $adminId");
     final QuerySnapshot snapProducts = await firestore
         .collection("products")
         .where('adminId', isEqualTo: adminId)
-        .where('deleted', isEqualTo: false)
         .get();
     allProducts.clear();
     allProducts =
