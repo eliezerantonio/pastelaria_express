@@ -23,7 +23,7 @@ class CartManager extends ChangeNotifier {
   }
 
   num get serviceCharge {
-    _serviceCharge = productsPrice * 0.05;
+    _serviceCharge = 800;
 
     return _serviceCharge;
   }

@@ -161,7 +161,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     child: CachedNetworkImage(
                       fit: BoxFit.cover,
                       imageUrl: widget.pastryshop != null
-                          ? widget.pastryshop.images[0]
+                          ? widget.pastryshop.image
                           : 'Null',
                     ),
                   ),

@@ -9,7 +9,6 @@ import '../user/user_manager.dart';
 
 class PastryshopManager with ChangeNotifier {
   List<Pastryshop> pastryshops = [];
-  StreamSubscription _subscription;
   PastryshopManager();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -24,33 +23,22 @@ class PastryshopManager with ChangeNotifier {
   }
 
   Future<void> loadAllShops() async {
-    _subscription = firestore
+    final snapshot = await firestore
         .collection("pastryshops")
         .orderBy("likes", descending: true)
-        .snapshots()
-        .listen((event) {
-      pastryshops.clear();
-
-      for (final doc in event.docs) {
-        pastryshops.add(Pastryshop.fromDocument(doc));
-      }
-      notifyListeners();
-    });
+        .get();
+    pastryshops.clear();
+    pastryshops = snapshot.docs.map((d) => Pastryshop.fromDocument(d)).toList();
+    notifyListeners();
   }
 
   Future<void> loadShop(String adminId) async {
-    _subscription = firestore
+    final snapshot = await firestore
         .collection("pastryshops")
         .where("adminId", isEqualTo: adminId)
-        .snapshots()
-        .listen((event) {
-      pastryshops.clear();
-
-      for (final doc in event.docs) {
-        pastryshops.add(Pastryshop.fromDocument(doc));
-      }
-      notifyListeners();
-    });
+        .get();
+    pastryshops.clear();
+    pastryshops = snapshot.docs.map((d) => Pastryshop.fromDocument(d)).toList();
   }
 
   void update(Pastryshop pastryshop) {
@@ -63,11 +51,5 @@ class PastryshopManager with ChangeNotifier {
     pastryshop.delete();
     pastryshops.removeWhere((p) => p.id == pastryshop.id);
     notifyListeners();
-  }
-
-  @override
-  void dispose() {
-    _subscription?.cancel();
-    super.dispose();
   }
 }

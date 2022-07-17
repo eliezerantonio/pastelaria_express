@@ -76,11 +76,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                      color: Colors.pink[300],
-                      borderRadius: const BorderRadius.only(
-                          bottomRight: Radius.circular(100),
-                          bottomLeft: Radius.circular(100))),
-                  height: 250,
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.pink[300],
+                        Colors.orange[300],
+                      ],
+                    ),
+                    borderRadius: const BorderRadius.only(
+                        bottomRight: Radius.circular(100),
+                        bottomLeft: Radius.circular(100)),
+                  ),
+                  height: 232,
                   width: double.infinity,
                 ),
                 Form(

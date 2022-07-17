@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
-  CustomTextField(
-      {Key key,
-      this.hintText,
-      @required this.prefixIcon,
-      @required this.onSaved,
-      @required this.labelText,
-      this.obscureText = false,
-      this.keyboardType = TextInputType.text,
-      this.validator})
-      : super(key: key);
+  CustomTextField({
+    Key key,
+    this.hintText,
+    @required this.prefixIcon,
+    @required this.onSaved,
+    @required this.labelText,
+    this.obscureText = false,
+    this.keyboardType = TextInputType.text,
+    this.initialValue,
+    this.validator,
+  }) : super(key: key);
 
   String hintText;
   Widget prefixIcon;
@@ -19,9 +20,11 @@ class CustomTextField extends StatelessWidget {
   void Function(String) onSaved;
   String Function(String) validator;
   TextInputType keyboardType;
+  String initialValue;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: initialValue,
       keyboardType: keyboardType,
       onSaved: onSaved,
       validator: validator,

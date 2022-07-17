@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pastelariaexpress/components/custom_button.dart';
 import 'package:provider/provider.dart';
 
 import '../models/cart/cart_manager.dart';
@@ -38,10 +39,10 @@ class PriceCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  "Taxa",
+                  "Taxa de Entrega",
                   style: TextStyle(color: Colors.black),
                 ),
-                Text(serviceCharge.toString()),
+                Text("Kz " + serviceCharge.toString()),
               ],
             ),
             const Divider(),
@@ -69,13 +70,9 @@ class PriceCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
               child: SizedBox(
                 height: 40,
-                child: RaisedButton(
+                child: CustomButton(
                   onPressed: onPressed,
-                  disabledColor:
-                      Theme.of(context).colorScheme.secondary.withAlpha(200),
-                  color: Theme.of(context).primaryColor,
-                  textColor: Colors.white,
-                  child: Text(buttonText),
+                  text: buttonText,
                 ),
               ),
             ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pastelariaexpress/components/custom_button.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/custom_textfield.dart';
 import '../../models/product/product.dart';
 import '../../models/product/product_manager.dart';
 import '../../models/user/user_manager.dart';
@@ -9,7 +11,8 @@ import 'components/images_form.dart';
 class EditProductScreen extends StatelessWidget {
   EditProductScreen(Product p, {Key key})
       : editing = p != null,
-        product = p != null ? p.clone() : Product(), super(key: key);
+        product = p != null ? p.clone() : Product(),
+        super(key: key);
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   final Product product;
@@ -26,7 +29,7 @@ class EditProductScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: Text(editing ? "Editar Produto" : 'Criar Produto',
-              style: TextStyle(color: Colors.black)),
+              style: const TextStyle(color: Colors.black)),
           centerTitle: true,
           actions: [
             if (editing)
@@ -50,141 +53,98 @@ class EditProductScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 16, bottom: 8),
-                      child: Text(
-                        'Titulo',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    TextFormField(
+                    CustomTextField(
                       initialValue: product.name,
-                      decoration: const InputDecoration(
-                        hintText: 'Título',
-                        border: InputBorder.none,
-                      ),
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
                       validator: (name) {
                         if (name.length < 3) {
-                          return 'Título muito curto';
+                          return 'Nome muito curto';
                         } else {
                           return null;
                         }
                       },
                       onSaved: (name) => product.name = name,
+                      labelText: 'Nome',
+                      prefixIcon: const Icon(Icons.shop, color: Colors.white),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 16, bottom: 8),
-                      child: Text(
-                        'Preço',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
+                    const SizedBox(
+                      height: 20,
                     ),
-                    TextFormField(
+                    CustomTextField(
                       initialValue: !editing ? '' : product.price.toString(),
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        hintText: 'Preço',
-                        border: InputBorder.none,
-                      ),
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      validator: (name) {
-                        if (name.length < 2) {
+                      validator: (price) {
+                        if (price.length < 2) {
                           return 'Digite Preco valido';
                         } else {
                           return null;
                         }
                       },
                       onSaved: (price) => product.price = num.tryParse(price),
+                      labelText: 'Preço',
+                      prefixIcon:
+                          const Icon(Icons.numbers, color: Colors.white),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 16, bottom: 8),
-                      child: Text(
-                        'Stock',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
+                    const SizedBox(
+                      height: 20,
                     ),
-                   
-                    const Padding(
-                      padding: EdgeInsets.only(top: 16, bottom: 8),
-                      child: Text(
-                        'Descrição',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    TextFormField(
+                    CustomTextField(
                       initialValue: product.description,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                          hintText: 'Descrição', border: InputBorder.none),
-                      validator: (desc) {
-                        if (desc.length < 3) return 'Descrição muito curta';
-                        return null;
+                      validator: (description) {
+                        if (description.length < 2) {
+                          return 'Digite descrição validq';
+                        } else {
+                          return null;
+                        }
                       },
-                      onSaved: (desc) => product.description = desc,
+                      onSaved: (description) =>
+                          product.description = description,
+                      labelText: 'Descrição',
+                      prefixIcon:
+                          const Icon(Icons.description, color: Colors.white),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     Consumer<Product>(
                       builder: (_, product, __) {
-                        return SizedBox(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: Container(
-                              height: 40,
-                              child: RaisedButton(
-                                onPressed: !product.loading
-                                    ? () async {
-                                        if (formKey.currentState.validate()) {
-                                          formKey.currentState.save();
-                                          //passando id do usuario logado e salvando o produto
-                                          await product.save(idUserManger.user.id);
-                                          context
-                                              .read<ProductManager>()
-                                              .update(product);
-                                          Navigator.of(context).pop();
-                                        }
-                                      }
-                                    : null,
-                                textColor: Colors.white,
-                                color: primaryColor,
-                                disabledColor: primaryColor.withAlpha(100),
-                                child: product.loading
-                                    ? const CircularProgressIndicator(
-                                        backgroundColor: Colors.white,
-                                      )
-                                    : const Text(
-                                        "Salvar",
-                                        style: TextStyle(fontSize: 18.0),
-                                      ),
+                        return Column(
+                          children: [
+                            SizedBox(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(30),
+                                child: SizedBox(
+                                    height: 40,
+                                    child: CustomButton(
+                                      onPressed: !product.loading
+                                          ? () async {
+                                              if (formKey.currentState
+                                                  .validate()) {
+                                                formKey.currentState.save();
+                                                //passando id do usuario logado e salvando o produto
+                                                await product
+                                                    .save(idUserManger.user.id);
+                                                context
+                                                    .read<ProductManager>()
+                                                    .update(product);
+                                                Navigator.of(context).pop();
+                                              }
+                                            }
+                                          : null,
+                                      text: 'Salvar',
+                                    )),
                               ),
                             ),
-                          ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            if (product.loading)
+                              CircularProgressIndicator(
+                                backgroundColor: Colors.pink[300],
+                              )
+                          ],
                         );
                       },
-                    )
+                    ),
                   ],
                 ),
               )

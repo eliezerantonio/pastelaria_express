@@ -1,21 +1,31 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pastelariaexpress/components/components.dart';
 import 'package:pastelariaexpress/models/pastryshop/pastryshop.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/pastryshop/pastryshop_mananger.dart';
 import '../../models/user/user_manager.dart';
-import 'components/images_form.dart';
 
-class ProfilePastryshopScreen extends StatelessWidget {
+class ProfilePastryshopScreen extends StatefulWidget {
+  @override
+  State<ProfilePastryshopScreen> createState() =>
+      _ProfilePastryshopScreenState();
+}
+
+class _ProfilePastryshopScreenState extends State<ProfilePastryshopScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  Pastryshop pastryshop = Pastryshop();
+  File _imageFile;
+
+  final ImagePicker _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).primaryColor;
     final idUserManger = UserManager();
+    final pastryshop = context.watch<PastryshopManager>().pastryshops[0];
 
     return ChangeNotifierProvider.value(
       value: pastryshop,
@@ -26,26 +36,58 @@ class ProfilePastryshopScreen extends StatelessWidget {
           title:
               const Text('Criar Perfil', style: TextStyle(color: Colors.black)),
           centerTitle: true,
-          actions: const [
-            // if (editing)
-            //   IconButton(
-            //     icon: const Icon(Icons.delete),
-            //     onPressed: () {
-            //       context.read<Pastryshop>().delete(product);
-            //       Navigator.of(context).pop();
-            //     },
-            //   )
-          ],
+          actions: const [],
         ),
         backgroundColor: Colors.white,
         body: Form(
           key: formKey,
           child: ListView(
+            physics: const BouncingScrollPhysics(),
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ImagesForm(pastryshop.newImages),
-              ),
+              if (_imageFile == null && pastryshop.image == null ||
+                  pastryshop.image == "")
+                Material(
+                  child: Container(
+                    height: 250,
+                    decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(20)),
+                    width: double.infinity,
+                    child: IconButton(
+                      icon: const Icon(Icons.cake),
+                      onPressed: () {
+                        onImageSelected();
+                      },
+                      color: Theme.of(context).primaryColor,
+                      iconSize: 50,
+                    ),
+                  ),
+                ),
+              _imageFile?.path != null
+                  ? GestureDetector(
+                      onTap: () {
+                        onImageSelected();
+                        pastryshop.image = null;
+                        setState(() {});
+                      },
+                      child: Image.file(
+                        File(_imageFile.path),
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      ),
+                    )
+                  : GestureDetector(
+                      onTap: () {
+                        onImageSelected();
+                        _imageFile = null;
+                        setState(() {});
+                      },
+                      child: Image.network(
+                        pastryshop.image,
+                        width: 250,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -62,6 +104,7 @@ class ProfilePastryshopScreen extends StatelessWidget {
                       ),
                     ),
                     CustomTextField(
+                      initialValue: pastryshop.name,
                       validator: (name) {
                         if (name.length < 3) {
                           return 'Nome muito curto';
@@ -75,19 +118,21 @@ class ProfilePastryshopScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     CustomTextField(
+                      initialValue: pastryshop.ibam,
                       validator: (desc) {
                         if (desc.length < 3) return 'Descrição muito curta';
                         return null;
                       },
                       onSaved: (desc) => pastryshop.description = desc,
-                      labelText: 'Descrição',
+                      labelText: 'Ibam',
                       prefixIcon:
                           const Icon(Icons.description, color: Colors.white),
                     ),
                     const SizedBox(height: 10),
                     CustomTextField(
+                      initialValue: pastryshop.description,
                       validator: (desc) {
-                        if (desc.length < 13) return 'Ibam';
+                        if (desc.length < 5) return 'Descrição';
                         return null;
                       },
                       onSaved: (desc) => pastryshop.description = desc,
@@ -111,12 +156,22 @@ class ProfilePastryshopScreen extends StatelessWidget {
                                         formKey.currentState.save();
                                         if (formKey.currentState.validate()) {
                                           //passando id do usuario logado e salvando o produto
-                                          await pastryshop
-                                              .save(idUserManger.user.id);
+                                          await pastryshop.save(
+                                              idUserManger.user.id, _imageFile);
                                           context
                                               .read<PastryshopManager>()
                                               .update(pastryshop);
-                                          Navigator.of(context).pop();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              duration:
+                                                  const Duration(seconds: 1),
+                                              content: const Text(
+                                                  "Atualizado com sucesso"),
+                                              backgroundColor: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
+                                          );
                                         }
                                       }
                                     : null,
@@ -135,5 +190,14 @@ class ProfilePastryshopScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void onImageSelected() async {
+    final XFile pickedFile = await _picker.pickImage(
+      source: ImageSource.gallery,
+    );
+    setState(() {
+      _imageFile = File(pickedFile.path);
+    });
   }
 }

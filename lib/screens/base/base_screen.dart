@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pastelariaexpress/screens/loginscreen.dart';
 import 'package:pastelariaexpress/screens/profile_pastryshop/profile_pastryshop_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -39,9 +38,9 @@ class _BaseScreenState extends State<BaseScreen> {
               HomeScreen(),
               OrdersScreen(),
               AdminOrdersScreen(),
+              ProfilePastryshopScreen(),
               SignUpPastryshopScreen(),
               const PastryshopsScreen(),
-              ProfilePastryshopScreen(),
             ],
           );
         },

@@ -41,11 +41,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     children: const <Widget>[
                       Divider(),
                       DrawerTile(
-                          iconData: Icons.settings, title: 'Pedidos', page: 3),
+                          iconData: Icons.settings, title: 'Pedidos', page: 2),
                       DrawerTile(
                           iconData: Icons.settings,
                           title: 'Perfil Pastelaria',
-                          page: 6),
+                          page: 3),
                     ],
                   );
                 } else {

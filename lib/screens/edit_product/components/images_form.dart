@@ -35,7 +35,7 @@ class ImagesForm extends StatelessWidget {
         return Column(
           children: [
             AspectRatio(
-              aspectRatio: 1,
+              aspectRatio: 2,
               child: CarouselSlider(
                 items: state.value.map<Widget>((image) {
                   return Stack(
@@ -66,29 +66,32 @@ class ImagesForm extends StatelessWidget {
                     ],
                   );
                 }).toList()
-                  ..add(Material(
-                    color: Colors.grey[100],
-                    child: IconButton(
-                      icon: const Icon(Icons.add_a_photo),
-                      onPressed: () {
-                        if (Platform.isAndroid) {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (_) => ImageSourceSheet(
-                              onImageSelected: onImageSelected,
-                            ),
-                          );
-                        } else if (Platform.isIOS) {
-                          showCupertinoModalPopup(
-                            context: context,
-                            builder: (_) => ImageSourceSheet(
-                              onImageSelected: onImageSelected,
-                            ),
-                          );
-                        }
-                      },
-                      color: Theme.of(context).primaryColor,
-                      iconSize: 50,
+                  ..add(SizedBox(
+                    width: double.infinity,
+                    child: Material(
+                      color: Colors.grey[100],
+                      child: IconButton(
+                        icon: const Icon(Icons.cake),
+                        onPressed: () {
+                          if (Platform.isAndroid) {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (_) => ImageSourceSheet(
+                                onImageSelected: onImageSelected,
+                              ),
+                            );
+                          } else if (Platform.isIOS) {
+                            showCupertinoModalPopup(
+                              context: context,
+                              builder: (_) => ImageSourceSheet(
+                                onImageSelected: onImageSelected,
+                              ),
+                            );
+                          }
+                        },
+                        color: Theme.of(context).primaryColor,
+                        iconSize: 50,
+                      ),
                     ),
                   )),
                 options: CarouselOptions(autoPlay: false, viewportFraction: 1),

@@ -26,7 +26,7 @@ class PastryshopWidget extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(7),
               child: CachedNetworkImage(
-                imageUrl: pastryshop.images[0],
+                imageUrl: pastryshop.image,
                 height: 90,
                 width: 90,
                 fit: BoxFit.cover,

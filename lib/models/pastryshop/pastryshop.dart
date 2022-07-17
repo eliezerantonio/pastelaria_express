@@ -8,7 +8,7 @@ import '../../imports.dart';
 class Pastryshop with ChangeNotifier {
   String id;
   String name;
-  List<String> images = [];
+  String image;
   String adminId;
   int likes = 0;
   int dislikes = 0;
@@ -16,7 +16,6 @@ class Pastryshop with ChangeNotifier {
   String description;
   bool deleted = false;
   List classifiers = [];
-  List<dynamic> newImages = [];
 
   Pastryshop(
       {this.id,
@@ -25,7 +24,7 @@ class Pastryshop with ChangeNotifier {
       this.adminId,
       this.ibam,
       this.deleted,
-      this.images});
+      this.image});
 
   Pastryshop.fromDocument(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -33,14 +32,14 @@ class Pastryshop with ChangeNotifier {
     name = data["name"] as String ?? "";
     ibam = data["ibam"] as String;
     deleted = data["deleted"] as bool;
-    images = List<String>.from(data['images'] as List<dynamic>) ?? [];
+    image = data['image'] as String;
 
     likes = data["likes"] as num;
     dislikes = data["dislikes"] as num;
     adminId = data["adminId"] as String;
     classifiers = List<String>.from(data['classifiers'] as List<dynamic>) ?? [];
     description = data["description"] as String;
-}
+  }
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -53,12 +52,12 @@ class Pastryshop with ChangeNotifier {
       firebase_storage.FirebaseStorage.instance.ref("pastryshops").child(id);
   UserManager user = UserManager();
 
-  Future<void> like() {
+  Future<void> like() async {
     firestore.collection("pastryshops").doc(id).update({'likes': likes + 1});
     saveClassifier("like");
   }
 
-  Future<void> dislike() {
+  Future<void> dislike() async {
     firestore
         .collection("pastryshops")
         .doc(id)
@@ -83,13 +82,18 @@ class Pastryshop with ChangeNotifier {
 
   Future<void> save(
     String adminId,
+    dynamic file,
   ) async {
     loading = true;
+    if (file != null) {
+      image = await uploadImge(file);
+    }
     final Map<String, dynamic> data = {
       'name': name,
       'description': description,
       'adminId': adminId,
       'ibam': ibam,
+      'image': image,
       'deleted': false,
       'classifiers': classifiers,
       'likes': likes,
@@ -103,31 +107,6 @@ class Pastryshop with ChangeNotifier {
       await firestoreRef.update(data);
     }
 
-    //IMAGES  [ URL1,URL2,URL3 ]
-    //NEWIMAGES [ URL1,URL2,URL3 , FILE1, FILE2]
-    //UPDATE  [URL2,URL3]
-
-    //MANDA FILE1 PRO STORAGE-> FURL1
-    // MANDA FILE2 PRO STORAGE FULR2
-    //EXCLUI [URL1]
-
-    //add
-    final List<String> updateImages = [];
-    for (final newImage in newImages) {
-      if (images.contains(newImage)) {
-        updateImages.add(newImage as String);
-      } else {
-        firebase_storage.UploadTask task =
-            storageRef.child(const Uuid().v1()).putFile(newImage as File);
-        firebase_storage.TaskSnapshot snapshot = await task;
-
-        final String url = await snapshot.ref.getDownloadURL();
-        updateImages.add(url);
-      }
-    }
-
-    await firestoreRef.update({'images': updateImages});
-    images = updateImages;
     loading = false;
   }
 
@@ -140,9 +119,18 @@ class Pastryshop with ChangeNotifier {
         id: id,
         name: name,
         description: description,
-        images: List.from(images),
+        image: image,
         deleted: deleted,
         adminId: adminId,
         ibam: ibam);
+  }
+
+  Future<String> uploadImge(img) async {
+    firebase_storage.UploadTask task =
+        storageRef.child(const Uuid().v1()).putFile(img as File);
+    firebase_storage.TaskSnapshot snapshot = await task;
+
+    final String url = await snapshot.ref.getDownloadURL();
+    return url;
   }
 }
