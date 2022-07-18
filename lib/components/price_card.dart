@@ -5,20 +5,23 @@ import 'package:provider/provider.dart';
 import '../models/cart/cart_manager.dart';
 
 class PriceCard extends StatelessWidget {
-  const PriceCard(
-      {this.buttonText, this.onPressed, this.timeDelivery, this.userChoice});
+  PriceCard({
+    this.buttonText,
+    this.onPressed,
+    this.timeDelivery,
+    this.received = false,
+  });
 
   final String buttonText;
   final VoidCallback onPressed;
   final String timeDelivery;
-  final String userChoice;
+  bool received;
 
   @override
   Widget build(BuildContext context) {
     final cartManager = context.watch<CartManager>();
     final productPrice = cartManager.productsPrice;
-    final totalPrice = cartManager.totalPrice;
-    final serviceCharge = cartManager.serviceCharge;
+    num totalPrice = cartManager.totalPrice+=received?1000:0;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 80, 20, 20),
@@ -35,16 +38,18 @@ class PriceCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Taxa de Entrega",
-                  style: TextStyle(color: Colors.black),
-                ),
-                Text("Kz " + serviceCharge.toString()),
-              ],
-            ),
+            if (received) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text(
+                    "Taxa de Entrega",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  Text("Kz 1000"),
+                ],
+              ),
+            ],
             const Divider(),
             const SizedBox(height: 12),
             Row(

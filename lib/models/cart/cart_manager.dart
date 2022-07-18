@@ -13,20 +13,21 @@ class CartManager extends ChangeNotifier {
   UserModel user;
 
   num productsPrice = 0.0;
-  num _serviceCharge = 0.0;
 
   num get totalPrice {
     num price = 0.0;
-    price = productsPrice + (serviceCharge ?? 0);
+    price = productsPrice;
 
     return price;
   }
 
-  num get serviceCharge {
-    _serviceCharge = 800;
+  set totalPrice(num value) {
+    productsPrice = 0.0;
+    productsPrice = value;
 
-    return _serviceCharge;
+    notifyListeners();
   }
+
 //  num get totalPrice => productsPrice + (deliveryPrice ?? 0);
 
   bool _loading = false;
@@ -37,7 +38,7 @@ class CartManager extends ChangeNotifier {
   // ignore: unnecessary_getters_setters
   set loading(bool value) {
     _loading = value;
-    // notifyListeners();
+    notifyListeners();
   }
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
