@@ -21,7 +21,8 @@ class PriceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartManager = context.watch<CartManager>();
     final productPrice = cartManager.productsPrice;
-    num totalPrice = cartManager.totalPrice+=received?1000:0;
+    cartManager.received = received;
+    num totalPrice = cartManager.totalPrice;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 80, 20, 20),

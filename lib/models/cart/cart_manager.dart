@@ -13,21 +13,31 @@ class CartManager extends ChangeNotifier {
   UserModel user;
 
   num productsPrice = 0.0;
+  num _serviceCharge = 0.0;
+
+  bool _received = false;
+
+  // ignore: unnecessary_getters_setters
+  bool get received => _received;
+
+  // ignore: unnecessary_getters_setters
+  set received(bool value) {
+    _received = value;
+    notifyListeners();
+  }
 
   num get totalPrice {
     num price = 0.0;
-    price = productsPrice;
+    price = productsPrice + (serviceCharge ?? 0);
 
     return price;
   }
 
-  set totalPrice(num value) {
-    productsPrice = 0.0;
-    productsPrice = value;
+  num get serviceCharge {
+    _serviceCharge = received ? 800 : 0.0;
 
-    notifyListeners();
+    return _serviceCharge;
   }
-
 //  num get totalPrice => productsPrice + (deliveryPrice ?? 0);
 
   bool _loading = false;
