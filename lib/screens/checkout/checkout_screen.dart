@@ -4,6 +4,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../components/custom_textfield.dart';
 import '../../components/price_card.dart';
 import '../../imports.dart';
 import '../../models/cart/cart_manager.dart';
@@ -22,7 +23,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   String choiceUser = "";
   String reference = "";
-  TextEditingController obsController = TextEditingController();
+  String obsController;
   bool isLoading = false;
   File _imageFile;
   final ImagePicker _picker = ImagePicker();
@@ -153,37 +154,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         ),
                       ],
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                        ),
-                        child: Container(
-                          width: 340,
-                          alignment: Alignment.center,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey[100],
-                          ),
-                          child: TextFormField(
-                            keyboardType: TextInputType.text,
-                            controller: obsController,
-                            maxLines: 4,
-                            decoration: const InputDecoration(
-                              labelText: "OBS (Opcional)",
-                              hintText: "",
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              contentPadding: EdgeInsets.only(
-                                top: 14,
-                                left: 4,
-                                right: 4,
-                              ),
-                              errorMaxLines: 1,
-                            ),
-                          ),
+                        padding: const EdgeInsets.all(8.0),
+                        child: CustomTextField(
+                          labelText: 'Obs',
+                          onSaved: (value) => obsController = value,
+                          prefixIcon: const Icon(Icons.description,
+                              color: Colors.white),
                         ),
                       ),
                       CheckboxListTile(
@@ -204,10 +180,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     choiceUser != "IBAM" ||
                                 _imageFile != null
                             ? () async {
+                                formKey.currentState.save();
                                 checkoutManager.checkout(
                                   user: user,
                                   img: _imageFile,
                                   pay: choiceUser,
+                                  obs: obsController,
                                   onStockFail: (e) {
                                     Navigator.of(context).popUntil((route) =>
                                         route.settings.name == '/cart');

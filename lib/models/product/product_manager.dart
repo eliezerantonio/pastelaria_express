@@ -71,6 +71,7 @@ class ProductManager extends ChangeNotifier {
     print("Buscar user $adminId");
     final QuerySnapshot snapProducts = await firestore
         .collection("products")
+        .where('deleted', isEqualTo: false)
         .where('adminId', isEqualTo: adminId)
         .get();
     allProducts.clear();

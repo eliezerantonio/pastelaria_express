@@ -3,18 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/pastryshop/pastryshop.dart';
+import '../../../models/pastryshop/pastryshop_mananger.dart';
 import '../../../models/user/user_manager.dart';
 
-class PastryshopWidget extends StatelessWidget {
+class PastryshopWidget extends StatefulWidget {
   const PastryshopWidget(this.pastryshop);
   final Pastryshop pastryshop;
 
   @override
+  State<PastryshopWidget> createState() => _PastryshopWidgetState();
+}
+
+class _PastryshopWidgetState extends State<PastryshopWidget> {
+  @override
   Widget build(BuildContext context) {
     final user = context.watch<UserManager>().user;
+
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed('/orders', arguments: pastryshop);
+        Navigator.of(context)
+            .pushNamed('/orders', arguments: widget.pastryshop);
       },
       child: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -23,7 +31,7 @@ class PastryshopWidget extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(7),
               child: CachedNetworkImage(
-                imageUrl: pastryshop.image,
+                imageUrl: widget.pastryshop.image,
                 height: 90,
                 width: 90,
                 fit: BoxFit.cover,
@@ -35,53 +43,75 @@ class PastryshopWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    pastryshop.name,
+                    widget.pastryshop.name,
                     style: const TextStyle(
                         fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 7),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        height: 22,
-                        width: 80,
-                        alignment: Alignment.center,
-                        child: Text(
-                          "${pastryshop.likes}",
-                          style: const TextStyle(
-                              fontSize: 14, color: Colors.white),
-                        ),
-                        decoration: BoxDecoration(
-                            color: Colors.pink[300],
-                            borderRadius: BorderRadius.circular(5)),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon:
+                                const Icon(Icons.thumb_up, color: Colors.blue),
+                            onPressed: user != null && !user.admin
+                                ? () {
+                                    if (widget.pastryshop.classifiers
+                                        .contains(user.id)) return;
+                                    widget.pastryshop.like();
+
+                                    context
+                                        .read<PastryshopManager>()
+                                        .increment(widget.pastryshop);
+                                  }
+                                : null,
+                          ),
+                          Text(
+                            "${widget.pastryshop.likes}",
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         width: 10,
                       ),
-                      Container(
-                        height: 22,
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(2),
-                        child: Text(
-                          "${pastryshop.dislikes} ",
-                          style: const TextStyle(
-                              fontSize: 14, color: Colors.white),
-                        ),
-                        decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(5)),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon:
+                                const Icon(Icons.thumb_down, color: Colors.red),
+                            onPressed: user != null && !user.admin
+                                ? () {
+                                    if (widget.pastryshop.classifiers
+                                        .contains(user.id)) return;
+                                    widget.pastryshop.dislike();
+                                  }
+                                : null,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            "${widget.pastryshop.dislikes} ",
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                   const SizedBox(height: 7),
-                  Text(pastryshop.description),
+                  Text(widget.pastryshop.description),
                 ],
               ),
             ),
             if (user.superUser)
               IconButton(
                 onPressed: () {
-                  pastryshop.delete();
+                  widget.pastryshop.delete();
                 },
                 icon: const Icon(Icons.delete, color: Colors.grey),
               )

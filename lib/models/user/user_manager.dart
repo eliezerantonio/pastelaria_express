@@ -34,6 +34,7 @@ class UserManager with ChangeNotifier {
       onSuccess();
     } on FirebaseAuthException catch (e) {
       onFail(getErrorString(e.code));
+      loading = false;
     } finally {
       loading = false;
     }

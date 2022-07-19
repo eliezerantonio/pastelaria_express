@@ -22,6 +22,27 @@ class PastryshopManager with ChangeNotifier {
     }
   }
 
+  void increment(Pastryshop pastryshop) {
+    pastryshops = pastryshops.map((element) {
+      if (element.id != pastryshop.id) return element;
+
+      element.likes++;
+
+      return element;
+    }).toList();
+    notifyListeners();
+  }
+
+  Future delete(Pastryshop pastryshop) async {
+    try {
+      pastryshops.removeWhere((element) => element.id == pastryshop.id);
+
+      notifyListeners();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   Future<void> loadAllShops() async {
     final snapshot = await firestore
         .collection("pastryshops")
@@ -44,12 +65,6 @@ class PastryshopManager with ChangeNotifier {
   void update(Pastryshop pastryshop) {
     pastryshops.removeWhere((p) => p.id == pastryshop.id);
     pastryshops.add(pastryshop);
-    notifyListeners();
-  }
-
-  void delete(Pastryshop pastryshop) {
-    pastryshop.delete();
-    pastryshops.removeWhere((p) => p.id == pastryshop.id);
     notifyListeners();
   }
 }

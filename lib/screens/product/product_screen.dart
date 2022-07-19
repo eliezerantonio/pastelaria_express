@@ -167,7 +167,9 @@ class ProductScreen extends StatelessWidget {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Consumer2<UserManager, Product>(
             builder: (_, userManager, product, __) {
-          if (!userManager.adminEnabled && userManager.isLogged) {
+          if (!userManager.superEnabled &&
+              !userManager.adminEnabled &&
+              userManager.isLogged) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
               child: Card(
@@ -249,18 +251,21 @@ class ProductScreen extends StatelessWidget {
               ),
             );
           } else {
-            return Container(
-              height: 47,
-              margin: const EdgeInsets.all(10),
-              child: CustomButton(
-                text: 'Faça login para comprar',
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => LoginScreen()));
-
-                },
-              ),
-            );
+            return !userManager.superEnabled &&
+                    !userManager.adminEnabled &&
+                    !userManager.isLogged
+                ? Container(
+                    height: 47,
+                    margin: const EdgeInsets.all(10),
+                    child: CustomButton(
+                      text: 'Faça login para comprar',
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => LoginScreen()));
+                      },
+                    ),
+                  )
+                : Container();
           }
         }),
       ),
