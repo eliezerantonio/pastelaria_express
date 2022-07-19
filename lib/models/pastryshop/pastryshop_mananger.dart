@@ -26,7 +26,7 @@ class PastryshopManager with ChangeNotifier {
     pastryshops = pastryshops.map((element) {
       if (element.id != pastryshop.id) return element;
 
-      element.likes++;
+      element.likes+=1;
 
       return element;
     }).toList();

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/pastryshop/pastryshop.dart';
+import '../../../models/pastryshop/pastryshop_mananger.dart';
 import '../../../models/user/user_manager.dart';
 
 class PastryshopWidget extends StatelessWidget {
@@ -56,6 +57,9 @@ class PastryshopWidget extends StatelessWidget {
                                     if (pastryshop.classifiers
                                         .contains(user.id)) return;
                                     pastryshop.like();
+                                     context
+                                        .read<PastryshopManager>()
+                                        .increment(pastryshop);
                                   }
                                 : null,
                           ),
