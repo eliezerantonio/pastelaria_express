@@ -20,7 +20,7 @@ class UserModel with ChangeNotifier {
   }
 
   bool admin = false;
-   bool superUser = false;
+  bool superUser = false;
 
   DocumentReference get firestoreRef =>
       FirebaseFirestore.instance.collection('users').doc(id);

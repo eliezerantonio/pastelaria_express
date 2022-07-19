@@ -187,7 +187,7 @@ class OrderTile extends StatelessWidget {
                                       return OrderProductTile(e);
                                     }).toList(),
                                   ),
-                                  Center(
+                                if(userManager.adminEnabled&& userManager.superEnabled)  Center(
                                     child: TextButton(
                                       child: const Text("Ligar para o cliente"),
                                       onPressed: openPhone,
