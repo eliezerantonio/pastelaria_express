@@ -156,7 +156,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: CustomTextField(
-                          labelText: 'Obs',
+                          labelText: 'Especificar detalhes',
                           onSaved: (value) => obsController = value,
                           prefixIcon: const Icon(Icons.description,
                               color: Colors.white),
