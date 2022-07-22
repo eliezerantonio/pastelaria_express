@@ -6,10 +6,21 @@ import 'components/components.dart';
 
 const HOME_SCREEN = "/home_screen";
 
-class HomeScreen extends StatelessWidget {
-  GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
-
+class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
+  @override
+  void initState() {
+    super.initState();
+    context.read<UserManager>().loadCurrentUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     final pastryshops = context
@@ -36,39 +47,40 @@ class HomeScreen extends StatelessWidget {
         title: const Text("Pastelaria Express",
             style: TextStyle(color: Colors.black)),
         actions: [
-         if (!user.superEnabled&& !user.adminEnabled)  GestureDetector(
-            onTap: () {
-              Navigator.of(context).pushNamed('/cart');
-            },
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.shopping_cart_rounded,
-                    color: Colors.grey[300],
-                    size: 30,
-                  ),
-                ),
-                if (items.isNotEmpty)
-                  Positioned(
-                    right: 29,
-                    left: 0,
-                    child: Container(
-                      height: 25,
-                      width: 25,
-                      alignment: Alignment.center,
-                      decoration: const BoxDecoration(
-                          color: Colors.red, shape: BoxShape.circle),
-                      child: Text(
-                        items.length.toString(),
-                        style: const TextStyle(),
-                      ),
+          if (!user.superEnabled && !user.adminEnabled)
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed('/cart');
+              },
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.shopping_cart_rounded,
+                      color: Colors.grey[300],
+                      size: 30,
                     ),
                   ),
-              ],
+                  if (items.isNotEmpty)
+                    Positioned(
+                      right: 29,
+                      left: 0,
+                      child: Container(
+                        height: 25,
+                        width: 25,
+                        alignment: Alignment.center,
+                        decoration: const BoxDecoration(
+                            color: Colors.red, shape: BoxShape.circle),
+                        child: Text(
+                          items.length.toString(),
+                          style: const TextStyle(),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
-          ),
         ],
       ),
       body: Column(

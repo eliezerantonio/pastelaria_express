@@ -25,7 +25,10 @@ class _ProfilePastryshopScreenState extends State<ProfilePastryshopScreen> {
   @override
   Widget build(BuildContext context) {
     final idUserManger = UserManager();
-    final pastryshop = context.watch<PastryshopManager>().pastryshops[0];
+    final pastryshops = context.watch<PastryshopManager>()?.pastryshops;
+    final pastryshop = pastryshops.isNotEmpty
+        ? context.watch<PastryshopManager>()?.pastryshops[0]
+        : Pastryshop();
 
     return ChangeNotifierProvider.value(
       value: pastryshop,
@@ -82,11 +85,13 @@ class _ProfilePastryshopScreenState extends State<ProfilePastryshopScreen> {
                         _imageFile = null;
                         setState(() {});
                       },
-                      child: Image.network(
-                        pastryshop.image,
-                        width: 250,
-                        fit: BoxFit.cover,
-                      ),
+                      child: pastryshop.image != null
+                          ? Image.network(
+                              pastryshop.image,
+                              width: 250,
+                              fit: BoxFit.cover,
+                            )
+                          : Container(),
                     ),
               Padding(
                 padding: const EdgeInsets.all(16),
@@ -172,6 +177,9 @@ class _ProfilePastryshopScreenState extends State<ProfilePastryshopScreen> {
                                                   .primaryColor,
                                             ),
                                           );
+                                          final pastryshops = context
+                                              .watch<PastryshopManager>()
+                                              ?.loadShop(idUserManger.user.id);
                                         }
                                       }
                                     : null,

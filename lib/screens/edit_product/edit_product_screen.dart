@@ -64,7 +64,7 @@ class EditProductScreen extends StatelessWidget {
                       },
                       onSaved: (name) => product.name = name,
                       labelText: 'Nome',
-                      prefixIcon: const Icon(Icons.shop, color: Colors.white),
+                      prefixIcon: const Icon(Icons.cake, color: Colors.white),
                     ),
                     const SizedBox(
                       height: 20,
@@ -81,8 +81,8 @@ class EditProductScreen extends StatelessWidget {
                       },
                       onSaved: (price) => product.price = num.tryParse(price),
                       labelText: 'Preço',
-                      prefixIcon:
-                          const Icon(Icons.numbers, color: Colors.white),
+                      prefixIcon: const Icon(Icons.attach_money_outlined,
+                          color: Colors.white),
                     ),
                     const SizedBox(
                       height: 20,

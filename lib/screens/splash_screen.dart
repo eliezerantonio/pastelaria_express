@@ -37,7 +37,12 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset("assets/img/LogoDD_Branco@300x.png"),
+            Image.asset(
+              "assets/img/LogoDD_Branco@300x.png",
+              width: 500,
+              height: 500,
+              fit: BoxFit.cover,
+            ),
             const SizedBox(height: 10),
             const Text(
               "Pastelaria Express",
