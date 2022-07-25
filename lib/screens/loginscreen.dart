@@ -238,7 +238,12 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
       child: Center(
-        child: Image.asset("assets/img/LogoDD_Branco@300x.png"),
+        child: Image.asset(
+          "assets/img/LogoDD_Branco@300x.png",
+          width: 600,
+          height: 600,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
