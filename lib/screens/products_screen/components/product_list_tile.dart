@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import '../../../models/product/product.dart';
 
 class ProductLisTile extends StatelessWidget {
-  const ProductLisTile(this.product);
+  ProductLisTile(this.product,  );
 
   final Product product;
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pushNamed("/product", arguments: product);

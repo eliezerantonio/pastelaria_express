@@ -84,6 +84,9 @@ class PastryshopWidget extends StatelessWidget {
                                     if (pastryshop.classifiers
                                         .contains(user.id)) return;
                                     pastryshop.dislike();
+                                     context
+                                        .read<PastryshopManager>()
+                                        .decrement(pastryshop);
                                   }
                                 : null,
                           ),

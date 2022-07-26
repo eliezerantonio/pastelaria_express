@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../models/order/order.dart';
+import '../../models/pastryshop/pastryshop_mananger.dart';
 import '../../models/user/user_manager.dart';
 import '../show_alert.dart';
 import 'cancel_order_dialog.dart';
@@ -28,6 +29,12 @@ class OrderTile extends StatelessWidget {
     final userManager = context.watch<UserManager>();
     final DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm');
     final String formattedDate = formatter.format(order.date.toDate());
+
+    final pastryshop = context
+        .read<PastryshopManager>()
+        .pastryshops
+        .where((element) => element.adminId == order.adminId)
+        .first;
 
     void showError() {
       Scaffold.of(context).showSnackBar(
@@ -91,7 +98,7 @@ class OrderTile extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               if (order.pastryshop.name != null || order.pastryshop.name != "")
-                Text(order.pastryshop.name ?? "Carregando...",
+                Text(pastryshop.name ?? "Carregando...",
                     textAlign: TextAlign.start,
                     style: const TextStyle(
                       fontSize: 17,
@@ -187,12 +194,15 @@ class OrderTile extends StatelessWidget {
                                       return OrderProductTile(e);
                                     }).toList(),
                                   ),
-                                if(userManager.adminEnabled&& userManager.superEnabled)  Center(
-                                    child: TextButton(
-                                      child: const Text("Ligar para o cliente"),
-                                      onPressed: openPhone,
+                                  if (userManager.adminEnabled &&
+                                      userManager.superEnabled)
+                                    Center(
+                                      child: TextButton(
+                                        child:
+                                            const Text("Ligar para o cliente"),
+                                        onPressed: openPhone,
+                                      ),
                                     ),
-                                  ),
                                 ],
                               ),
                             );

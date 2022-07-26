@@ -1,4 +1,5 @@
 import 'package:pastelariaexpress/models/admin/admin_orders_manager.dart';
+import 'package:pastelariaexpress/models/cart/cart_product.dart';
 import 'package:pastelariaexpress/models/pastryshop/pastryshop.dart';
 import 'package:pastelariaexpress/screens/base/base_screen.dart';
 import 'package:pastelariaexpress/screens/confirmation/confirmation_screen.dart';
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => Product(),
           lazy: false,
-        ),
+        ), 
         ChangeNotifierProvider(
           create: (context) => PageManager(),
           lazy: false,

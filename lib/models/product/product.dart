@@ -30,9 +30,8 @@ class Product extends ChangeNotifier {
       images = List<String>.from(data['images'] as List<dynamic>);
       deleted = (data['deleted'] ?? false) as bool;
       price = data["price"] as num;
-      firestore.doc('pastryshops/$adminId').snapshots().listen((doc) {
-        pastryshop = Pastryshop.fromDocument(doc);
-      });
+
+    
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -46,7 +45,7 @@ class Product extends ChangeNotifier {
   num price;
   bool deleted = false;
   int quantity = 1;
-  Pastryshop pastryshop = Pastryshop();
+  List<Pastryshop> pastryshops;
 
   List<dynamic> newImages;
 
@@ -125,7 +124,8 @@ class Product extends ChangeNotifier {
     images = updateImages;
     loading = false;
   }
-void delete() {
+
+  void delete() {
     firestoreRef.update({'deleted': true});
   }
 
@@ -140,7 +140,6 @@ void delete() {
     );
   }
 
-  
   void increment() {
     quantity++;
 

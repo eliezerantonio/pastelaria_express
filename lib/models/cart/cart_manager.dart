@@ -34,7 +34,7 @@ class CartManager extends ChangeNotifier {
   }
 
   num get serviceCharge {
-    _serviceCharge = received ? 800 : 0.0;
+    _serviceCharge = received ? 1000 : 0.0;
 
     return _serviceCharge;
   }

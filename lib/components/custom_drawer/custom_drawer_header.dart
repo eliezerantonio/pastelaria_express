@@ -33,7 +33,7 @@ class CustomDrawerHeader extends StatelessWidget {
           ),
         ),
         accountEmail: Text(
-          user ? userManager.user.email : "Faca login para",
+          user ? userManager.user.email : "",
         ),
         accountName: Text(user ? userManager.user.name : "",
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),

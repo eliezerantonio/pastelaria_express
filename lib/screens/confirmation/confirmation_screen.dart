@@ -41,7 +41,16 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
         centerTitle: true,
       ),
       body: Container(
-        color: Colors.pink[300],
+       decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.pink[300],
+                        Colors.orange[300],
+                      ],
+                    ),
+                    ),
         child: Column(
           children: [
             Expanded(

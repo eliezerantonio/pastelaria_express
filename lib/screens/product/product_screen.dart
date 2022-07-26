@@ -14,6 +14,10 @@ class ProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final pastryshop = context
+        .read<PastryshopManager>()
+        .pastryshops
+        .where((element) => element.adminId == product.adminId);
     return ChangeNotifierProvider.value(
       value: product,
       child: Scaffold(
@@ -118,6 +122,13 @@ class ProductScreen extends StatelessWidget {
                                 color: Colors.grey[200]),
                           ),
                         ),
+                        const SizedBox(height: 6),
+                        Text(
+                          "Pastelaria: " + pastryshop.first.name,
+                          style:
+                              const TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                          const SizedBox(height: 6),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

@@ -97,6 +97,7 @@ class _SignUpPastryshopScreenState extends State<SignUpPastryshopScreen> {
                       CustomTextField(
                         onSaved: (password) => user.password = password,
                         labelText: "Senha",
+                        obscureText:true,
                         keyboardType: TextInputType.text,
                         prefixIcon: const Icon(Icons.lock, color: Colors.white),
                       ),
@@ -107,6 +108,7 @@ class _SignUpPastryshopScreenState extends State<SignUpPastryshopScreen> {
                         onSaved: (confirmPassword) =>
                             user.confirmPassword = confirmPassword,
                         labelText: "Repetir senha",
+                        obscureText:true,
                         keyboardType: TextInputType.text,
                         prefixIcon: const Icon(Icons.lock, color: Colors.white),
                       ),

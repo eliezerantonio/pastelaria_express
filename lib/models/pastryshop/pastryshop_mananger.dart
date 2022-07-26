@@ -26,7 +26,18 @@ class PastryshopManager with ChangeNotifier {
     pastryshops = pastryshops.map((element) {
       if (element.id != pastryshop.id) return element;
 
-      element.likes+=1;
+      element.likes += 1;
+
+      return element;
+    }).toList();
+    notifyListeners();
+  }
+
+  void decrement(Pastryshop pastryshop) {
+    pastryshops = pastryshops.map((element) {
+      if (element.id != pastryshop.id) return element;
+
+      element.dislikes += 1;
 
       return element;
     }).toList();

@@ -88,6 +88,7 @@ class CadastroScreen extends StatelessWidget {
                       CustomTextField(
                         hintText: "Email",
                         labelText: "Insira o seu email",
+                        keyboardType: TextInputType.emailAddress,
                         prefixIcon:
                             const Icon(Icons.email, color: Colors.white),
                         onSaved: (email) => userModel.email = email,
@@ -110,6 +111,7 @@ class CadastroScreen extends StatelessWidget {
                       CustomTextField(
                         hintText: "Número",
                         labelText: "Insira o seu número",
+                        keyboardType: TextInputType.number,
                         prefixIcon:
                             const Icon(Icons.phone, color: Colors.white),
                         onSaved: (phone) => userModel.phone = phone,

@@ -30,8 +30,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   bool received = false;
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.secondary;
-    final ibam = context.watch<CartManager>().items[0].product.pastryshop.ibam;
+    final product = context.watch<CartManager>().items[0].product;
+
+    final pastryshop = context
+        .read<PastryshopManager>()
+        .pastryshops
+        .where((element) => element.adminId == product.adminId)
+        .first;
     final user = context.watch<UserManager>().user;
     return ChangeNotifierProxyProvider<CartManager, CheckoutManager>(
       create: (_) => CheckoutManager(),
@@ -55,14 +60,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const CircularProgressIndicator(),
+                    CircularProgressIndicator(color: Colors.pink[300]),
                     const SizedBox(
                       height: 16,
                     ),
                     Text(
-                      'Processando seu pagamento...',
+                      'Finalizando a compra aguarde...',
                       style: TextStyle(
-                        color: color,
+                        color: Colors.pink[300],
                         fontWeight: FontWeight.w800,
                         fontSize: 16,
                       ),
@@ -71,8 +76,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
               );
             } else if (isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return Center(
+                child: CircularProgressIndicator(color: Colors.pink[300]),
               );
             }
             return Stack(
@@ -112,7 +117,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       if (choiceUser == "IBAM") ...[
                         GestureDetector(
                           onTap: () {
-                            FlutterClipboard.copy(ibam).then(
+                            FlutterClipboard.copy(pastryshop.ibam).then(
                               (value) =>
                                   ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -126,7 +131,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(ibam),
+                              Text(pastryshop.ibam ?? ""),
                               const Icon(Icons.copy),
                             ],
                           ),
@@ -176,10 +181,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       PriceCard(
                         buttonText: 'Confirmar',
                         received: received,
-                        onPressed: choiceUser.isNotEmpty &&
-                                    choiceUser != "IBAM" ||
-                                _imageFile != null
+                        onPressed: choiceUser != "IBAM" || _imageFile != null
                             ? () async {
+                                if (choiceUser.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
+                                      content: const Text(
+                                          "Selecione um metodo de pagamento"),
+                                    ),
+                                  );
+                                  return;
+                                }
                                 formKey.currentState.save();
                                 checkoutManager.checkout(
                                   user: user,

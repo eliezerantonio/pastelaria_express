@@ -125,10 +125,10 @@ class _ProfilePastryshopScreenState extends State<ProfilePastryshopScreen> {
                     CustomTextField(
                       initialValue: pastryshop.ibam,
                       validator: (desc) {
-                        if (desc.length < 3) return 'Descrição muito curta';
+                        if (desc.length < 3) return 'ibam muito curto';
                         return null;
                       },
-                      onSaved: (desc) => pastryshop.description = desc,
+                      onSaved: (desc) => pastryshop.ibam = desc,
                       labelText: 'Ibam',
                       prefixIcon:
                           const Icon(Icons.description, color: Colors.white),
