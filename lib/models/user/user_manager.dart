@@ -128,6 +128,6 @@ class UserManager with ChangeNotifier {
   }
 
   bool get isLoggedIn => user != null;
-  bool get adminEnabled => user != null && user.admin;
-  bool get superEnabled => user != null && user.superUser;
+  bool get adminEnabled => isLoggedIn && user.admin;
+  bool get superEnabled => isLoggedIn && user?.superUser;
 }

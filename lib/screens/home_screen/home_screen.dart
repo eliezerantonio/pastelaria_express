@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text("Pastelaria Express",
             style: TextStyle(color: Colors.black)),
         actions: [
-          if (!user.superEnabled && !user.adminEnabled)
+          if (!user?.superEnabled && !user.adminEnabled)
             GestureDetector(
               onTap: () {
                 Navigator.of(context).pushNamed('/cart');
